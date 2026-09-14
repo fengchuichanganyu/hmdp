@@ -3,6 +3,11 @@ server:
 spring:
   application:
     name: hmdp
+  servlet:
+    multipart:
+      # 单张探店图片最大 10MB；请求上限稍大一些，为 multipart 元数据预留空间。
+      max-file-size: 10MB
+      max-request-size: 12MB
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/hmdp?useSSL=false&serverTimezone=UTC

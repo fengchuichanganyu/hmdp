@@ -78,6 +78,14 @@ public class UserController {
         return Result.ok(user);
     }
 
+    /**
+     * 用户签到
+     */
+    @PutMapping("/sign")
+    public Result sign() {
+        return userService.sign();
+    }
+
     @GetMapping("/info/{id}")
     public Result info(@PathVariable("id") Long userId){
         // 查询详情
