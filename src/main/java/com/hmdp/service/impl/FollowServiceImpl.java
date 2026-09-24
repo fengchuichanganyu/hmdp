@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.hmdp.utils.RedisConstants.FOLLOW_KEY;
+
 /**
  * <p>
  *  服务实现类
@@ -41,7 +43,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
         // 当前用户由登录拦截器写入 UserHolder，不能从前端参数获取。
         Long userId = UserHolder.getUser().getId();
         // key 属于关注者；Set 的 member 是他关注的用户ID，不是他的粉丝ID。
-        String key = "follows:" + userId;
+        String key = FOLLOW_KEY + userId;
         // 2. true 关注：向 tb_follow 新增一条有方向的关系。
         if (isFollow) {
             Follow follow = new Follow();
@@ -80,8 +82,8 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow> impleme
     public Result followCommons(Long id) {
         // 1. 当前登录用户的关注集合，以及对方的关注集合。
         Long userId = UserHolder.getUser().getId();
-        String key = "follows:" + userId;
-        String key2 = "follows:" + id;
+        String key = FOLLOW_KEY + userId;
+        String key2 = FOLLOW_KEY + id;
         // 2. SINTER 求交集：两个人都关注的用户ID。Set 不保证结果顺序。
         Set<String> intersect = stringRedisTemplate.opsForSet().intersect(key, key2);
         if (intersect == null || intersect.isEmpty()) {

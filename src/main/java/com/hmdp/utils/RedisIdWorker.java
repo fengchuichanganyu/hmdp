@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+import static com.hmdp.utils.RedisConstants.ID_WORKER_KEY;
+
 @Component
 public class RedisIdWorker {
 
@@ -33,7 +35,7 @@ public class RedisIdWorker {
         // 2.生成序列号，每个业务每天单独计数
         String date = now.format(DateTimeFormatter.ofPattern("yyyy:MM:dd"));
         Long count = stringRedisTemplate.opsForValue()
-                .increment("icr:" + keyPrefix + ":" + date);
+                .increment(ID_WORKER_KEY + keyPrefix + ":" + date);
 
         // 3.拼接并返回：高32位时间戳 + 低32位序列号
         return timestamp << COUNT_BITS | count;

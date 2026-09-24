@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hmdp.dto.LoginFormDTO;
 import com.hmdp.dto.Result;
@@ -109,6 +110,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 8.将token返回给客户端
         return Result.ok(token);
+    }
+
+    @Override
+    public Result logout(String token) {
+        if (StrUtil.isBlank(token)) {
+            return Result.ok();
+        }
+        stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        return Result.ok();
     }
 
     @Override
